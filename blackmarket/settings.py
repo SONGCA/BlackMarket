@@ -44,18 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    "corsheaders",
-
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'users',
     'articles',
     'paints',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.kakao',
     'allauth.socialaccount.providers.naver',

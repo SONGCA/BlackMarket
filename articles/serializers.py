@@ -1,6 +1,6 @@
 from turtle import update
 from rest_framework import serializers
-from articles.models import Article, Comment
+from articles.models import Image, Article, Comment
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,7 +16,6 @@ class ArticleSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     def get_user(self, obj):
         return obj.user.email
-    
     
     class Meta:
         model = Article

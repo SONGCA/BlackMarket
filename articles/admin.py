@@ -1,6 +1,6 @@
 from django.contrib import admin
-from articles.models import Article, Comment
+from articles.models import Article, Image, Comment
 
-# Register your models here.
 admin.site.register(Article)
+admin.site.register(Image)
 admin.site.register(Comment)
