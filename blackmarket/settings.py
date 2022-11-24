@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'users',
     'articles',
-    'paints',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
