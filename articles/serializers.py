@@ -1,12 +1,38 @@
+from turtle import update
 from rest_framework import serializers
-from articles.models import Image, Article
+from articles.models import Image, Article, Comment
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ("content",) # 마지막에 콤마를 꼭 해줘야 한다!!
 
 class ArticleSerializer(serializers.ModelSerializer):
-    username = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
+    def get_user(self, obj):
+        return obj.user.email
+    
+    class Meta:
+        model = Article
+        fields = '__all__'
 
-    def get_username(self, obj):
-        return obj.user.fullname
+
+class ArticleCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ("title", "image", "content")
+
+class ArticleListSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+        return obj.user.email
 
     class Meta:
         model = Article
-        fields = ["id", "title", "content", "created_at", "updated_at", "username", "user", "image"] 
+        fields = ("pk","title","image","updated_at","user",)

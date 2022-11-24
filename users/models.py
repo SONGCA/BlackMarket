@@ -1,18 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser, PermissionsMixin
+    BaseUserManager, AbstractBaseUser
 )
-
+# Create your models here.
 
 class UserManager(BaseUserManager):
-    # 일반 user 생성
-    def create_user(self, username, email, password=None):
+    def create_user(self, email, password=None):
 
-        if not username:
-            raise ValueError('Users must have an username')
+        if not email:
+            raise ValueError('Users must have an email address')
 
         user = self.model(
-            username = username,
             email=self.normalize_email(email),
         )
 
@@ -20,37 +18,34 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def create_superuser(self, email, password=None):
 
-    def create_superuser(self, username, email, password=None):
         user = self.create_user(
-            username=username,
-            email=email,
+            email,
             password=password,
         )
         user.is_admin = True
         user.save(using=self._db)
         return user
 
+class User(AbstractBaseUser):
+    email = models.EmailField(verbose_name='email address',max_length=255, unique=True)
+    nickname = models.CharField(max_length=30, default='')
+    phone = models.IntegerField(blank=True, null=True)
+    profile_img = models.ImageField(blank=True, null=True)
+    introduce = models.CharField(max_length=50, blank=True, null=True)
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True, null=True)
 
-class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(verbose_name="email", max_length=255, blank=True, null=True)
-    username = models.CharField(verbose_name="username", max_length=20, blank=False, unique=True)
-    
-    
-    # User 모델의 필수 field
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    
-    # 헬퍼 클래스 사용
+
     objects = UserManager()
-    
-    #사용자의 USERUSERNAME_FIELD를 지정
-    USERNAME_FIELD = 'username'
-    # 필수로 작성해야하는 field
-    REQUIRED_FIELDS = ['email']
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.username
+        return self.email
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission?"
