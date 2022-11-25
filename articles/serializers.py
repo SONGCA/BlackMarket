@@ -14,6 +14,8 @@ class CommentCreateSerializer(serializers.ModelSerializer):
 
 class ArticleSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
+    comment_set = CommentSerializer(many=True)
+    
     def get_user(self, obj):
         return obj.user.email
     

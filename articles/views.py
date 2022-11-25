@@ -139,9 +139,8 @@ class CommentView(APIView):
     def post(self, request, article_id):
         serializer = CommentCreateSerializer(data=request.data)
         if serializer.is_valid():
-            # 댓글은 user뿐만 아니라 article_id도 필수이다
-            serializer.save(comment_author=request.user, comment_postid_id=article_id)
-            return Response(serializer.data)
+            serializer.save(user=request.user, article_id=article_id)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
