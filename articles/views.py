@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from rest_framework.generics import get_object_or_404
-from articles.serializers import ArticleSerializer, ArticleCreateSerializer, ArticleListSerializer, CommentSerializer, CommentCreateSerializer
+from articles.serializers import ArticleSerializer, ArticleCreateSerializer, ArticleListSerializer, ArticleUpdateSerializer, CommentSerializer, CommentCreateSerializer
 from articles.models import Article, Comment, Image
 
 import cv2 
@@ -107,11 +107,11 @@ class ArticleDetailView(APIView):
         serializer = ArticleSerializer(article)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def put(self, request, article_id):
+    def patch(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
         # 요청자가 게시글 작성자일 경우에만 수정 가능
-        if request.user == article.post_author:
-            serializer = ArticleCreateSerializer(article, data=request.data)
+        if request.user == article.user:
+            serializer = ArticleUpdateSerializer(article, data=request.data)
             if serializer.is_valid():
                 serializer.save()  # 수정이기 때문에 user정보 불필요
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -122,7 +122,7 @@ class ArticleDetailView(APIView):
 
     def delete(self, request, article_id):
         article = get_object_or_404(Article, id=article_id)
-        if request.user == article.post_author:
+        if request.user == article.user:
             article.delete()
             return Response("삭제되었습니다.", status=status.HTTP_204_NO_CONTENT)
         else:
