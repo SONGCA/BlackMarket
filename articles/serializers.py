@@ -21,6 +21,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Article
         fields = '__all__'
 
+
 # 게시글 생성 serial
 class ArticleCreateSerializer(serializers.ModelSerializer):
     class Meta:
