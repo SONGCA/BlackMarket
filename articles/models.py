@@ -3,7 +3,7 @@ from users.models import User
 
 # Create your models here.
 class Image(models.Model):
-    output_img = models.FileField("결과사진", upload_to="media/", null=True)
+    output_img = models.FileField("결과사진", upload_to="output/", null=True)
     
     def __str__(self):
         return str(self.output_img)

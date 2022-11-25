@@ -61,8 +61,8 @@ def paint(filestr):
     ts = time.time()
     file_name = datetime.fromtimestamp(ts).strftime('%d-%m-%Y_%H-%M-%S')
 
-    cv2.imwrite(f"media/{file_name}.jpeg", output) # 파일 생성
-    result = f'{file_name}.jpeg'
+    cv2.imwrite(f"media/output/{file_name}.jpeg", output) # 파일 생성
+    result = f'/media/output/{file_name}.jpeg'
 
     # 파일 경로명 리턴
     return result
