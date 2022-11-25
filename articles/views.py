@@ -1,6 +1,8 @@
 import random
 from datetime import datetime
+import time
 import jwt
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -12,15 +14,15 @@ from articles.models import Article, Comment, Image
 import cv2 
 import numpy as np
 
-# Create your views here.
+# 이미지 유화 변환 함수
 def paint(filestr):
     npimg = np.fromstring(filestr, np.uint8)
-    input_img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+    input_img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)  # 이미지 로드하기
     # 화풍 랜덤하게 선택하기
-    path1 = 'models/eccv16/'
-    path2 = 'models/instance_norm/'
+    path1 = 'articles/models/eccv16/'
+    path2 = 'articles/models/instance_norm/'
     paints = {
-        1: path1+'composition.t7',
+        1: path1+'composition_vii.t7',
         2: path1+'la_muse.t7',
         3: path1+'starry_night.t7',
         4: path1+'the_wave.t7',
@@ -55,36 +57,41 @@ def paint(filestr):
     output += MEAN_VALUE
     output = np.clip(output, 0, 255)
     output = output.astype('uint8')
-    
-    time = datetime.now().strftime('%Y-%m-%d%H:%M:%s')
-    cv2.imwrite(f'output/{time}.jpeg', output) 
-    result = f'output/{time}.jpeg'
+   
+    ts = time.time()
+    file_name = datetime.fromtimestamp(ts).strftime('%d-%m-%Y_%H-%M-%S')
 
+    cv2.imwrite(f"media/{file_name}.jpeg", output) # 파일 생성
+    result = f'{file_name}.jpeg'
+
+    # 파일 경로명 리턴
     return result
 
-# 게시글 보기/작성하기
+# 게시글 보기/작성하기 -> 좌우 스크롤 보기에 불러올 것
 class ArticleView(APIView):
+    # authentication_classes = [JWTAuthentication]
+    
     def get(self, request):
-        articles = Article.objects.all()
+        articles = Article.objects.all().order_by('-updated_at')
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        data = request.data
         output_img = paint(
-                filestr=request.FILES['input'].read(),
+                filestr=request.FILES['article_image'].read(),
             )
-        image_info = Image.objects.create(output_img=output_img)
+        image_info = Image.objects.create(output_img=output_img)  # Image db에 저장
         image_info.save()
 
         data = {
             "user" : request.user.id,
             "image" : output_img,
-            "title" : request.data["title"],
-            "content" : request.data["content"]
+            "title" : request.data["article_title"],
+            "content" : request.data["article_content"],
+            "price": request.data["article_price"]
         }
 
-        article_serializer = ArticleSerializer(data=data)
+        article_serializer = ArticleCreateSerializer(data=data)
 
         if article_serializer.is_valid():
             article_serializer.save()

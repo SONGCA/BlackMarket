@@ -22,11 +22,13 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# 게시글 생성 serial
 class ArticleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-        fields = ("title", "image", "content")
+        fields = ("user", "title", "image", "content", "price")
 
+# 게시글 리스트 serial
 class ArticleListSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
 
@@ -35,4 +37,4 @@ class ArticleListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ("pk","title","image","updated_at","user",)
+        fields = ("pk", "title","image","price","user",)

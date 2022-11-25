@@ -3,7 +3,10 @@ from users.models import User
 
 # Create your models here.
 class Image(models.Model):
-    output_img = models.FileField("결과사진", upload_to="output/", null=True)
+    output_img = models.FileField("결과사진", upload_to="media/", null=True)
+    
+    def __str__(self):
+        return str(self.output_img)
     
 class Article(models.Model):
     user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)

@@ -6,8 +6,10 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
 from users.models import User
-from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, UserProfileSerializer
 
+# 회원가입 view
+
+from users.serializers import CustomTokenObtainPairSerializer, UserSerializer, UserProfileSerializer
 
 class UserView(APIView):
     def post(self, request):
@@ -34,6 +36,7 @@ class ProfileView(APIView):
         user = get_object_or_404(User, id=user_id)
         serializer = UserProfileSerializer(user)
         return Response(serializer.data)
+        
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer

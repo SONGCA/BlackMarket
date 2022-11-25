@@ -3,6 +3,8 @@ from users.models import User
 # from articles.serializers import ArticleListSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+
+# 회원가입과 회원정보수정에서 사용할 serial
 class UserProfileSerializer(serializers.ModelSerializer):
     followers = serializers.StringRelatedField(many=True)
     followings = serializers.StringRelatedField(many=True)
@@ -31,6 +33,8 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+
+# 로그인 시 사용할 serial
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
