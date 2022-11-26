@@ -40,3 +40,9 @@ class ArticleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ("pk", "title","image","price","user",)
+        
+# 게시글 업데이트 serial
+class ArticleUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+        fields = ("title", "content", "price")
