@@ -1,18 +1,16 @@
 from rest_framework import serializers
 from users.models import User
-# from articles.serializers import ArticleListSerializer
+from articles.serializers import ArticleListSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 # 회원가입과 회원정보수정에서 사용할 serial
 class UserProfileSerializer(serializers.ModelSerializer):
-    followers = serializers.StringRelatedField(many=True)
-    followings = serializers.StringRelatedField(many=True)
-    # article_set = ArticleListSerializer(many=True)
+    article_set = ArticleListSerializer(many=True)
     
     class Meta:
         model = User
-        fields = ("id", "email", "nickname", "followings", "followers",)
+        fields = ("id", "email", "nickname", "profile_img", "introduce", "password", "article_set",)
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

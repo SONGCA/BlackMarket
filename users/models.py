@@ -31,9 +31,8 @@ class User(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address',max_length=255, unique=True)
     nickname = models.CharField(max_length=30, default='')
     phone = models.IntegerField(blank=True, null=True)
-    profile_img = models.ImageField(blank=True, null=True)
+    profile_img = models.ImageField(blank=True, upload_to="profile_img/", default="profile_img/profile.jpeg", null=True)
     introduce = models.CharField(max_length=50, blank=True, null=True)
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True, null=True)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

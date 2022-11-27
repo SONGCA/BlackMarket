@@ -150,7 +150,7 @@ class CommentDetailView(APIView):
     def put(self, request, article_id, comment_id):
         comment = get_object_or_404(Comment, id=comment_id)
         # 요청자가 댓글 작성자일 경우에만 수정 가능
-        if request.user == comment.comment_author:
+        if request.user == comment.user:
             serializer = CommentCreateSerializer(comment, data=request.data)
             if serializer.is_valid():
                 serializer.save()  # 수정이기 때문에 user, article_id 정보 불필요
@@ -161,8 +161,9 @@ class CommentDetailView(APIView):
             return Response("권한이 없습니다.", status=status.HTTP_403_FORBIDDEN) 
 
     def delete(self, request, article_id, comment_id):
+        print(comment_id)
         comment = get_object_or_404(Comment, id=comment_id)
-        if request.user == comment.comment_author:
+        if request.user == comment.user:
             comment.delete()
             return Response("삭제되었습니다.", status=status.HTTP_204_NO_CONTENT)
         else:

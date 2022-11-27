@@ -9,7 +9,7 @@ class Image(models.Model):
         return str(self.output_img)
     
 class Article(models.Model):
-    user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, verbose_name="작성자", on_delete=models.CASCADE, related_name="article_set")
     content = models.TextField()
     title = models.CharField("제목", max_length=50)
     price = models.CharField("가격", max_length=50)

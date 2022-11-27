@@ -20,17 +20,6 @@ class UserView(APIView):
         else:
             return Response({"message":f"${serializer.errors}"}, status=status.HTTP_400_BAD_REQUEST)
 
-class FollowView(APIView):
-    def post(self, request, user_id):
-        you = get_object_or_404(User, id=user_id)
-        me = request.user
-        if me in you.followers.all():
-            you.followers.remove(me)
-            return Response("언팔로우했습니다.", status=status.HTTP_200_OK)
-        else:
-            you.followers.add(me)
-            return Response("팔로우했습니다.", status=status.HTTP_200_OK)
-
 class ProfileView(APIView):
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)

@@ -3,6 +3,11 @@ from rest_framework import serializers
 from articles.models import Image, Article, Comment
 
 class CommentSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+
+    def get_user(self, obj):
+        return obj.user.nickname
+    
     class Meta:
         model = Comment
         fields = '__all__'
@@ -40,7 +45,7 @@ class ArticleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
         fields = ("pk", "title","image","price","user",)
-        
+  
 # 게시글 업데이트 serial
 class ArticleUpdateSerializer(serializers.ModelSerializer):
     class Meta:
