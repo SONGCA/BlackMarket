@@ -54,7 +54,6 @@
 ## API 설계
 <img width="774" alt="usersapi" src="https://user-images.githubusercontent.com/96775737/204175715-de7cb971-63d3-4299-badc-70a57b955482.png">
 Users
-
 <img width="484" alt="articlesapi" src="https://user-images.githubusercontent.com/96775737/204175745-fd41ad16-a05f-4174-9c32-1fcbb22d0ea6.png">
 Articles
 
